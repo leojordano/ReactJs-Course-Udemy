@@ -1,8 +1,16 @@
 import React from 'react'
 
-const TodoList = props => {
+const TodoList = ({todo, toggleTodo}) => {
     return (
-        <li>{props.todo}</li>
+        <li 
+         onClick={() => toggleTodo(todo)} 
+            className='collection-item'
+            style={{
+                textDecoration: todo.done ? 'line-through' : null,
+            }}
+         >
+            {todo.text}
+        </li>
     )
 }
 

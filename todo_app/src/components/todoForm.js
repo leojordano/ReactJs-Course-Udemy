@@ -1,32 +1,33 @@
 import React from "react";
+import { connect } from 'react-redux'
+import { setText, addTodo } from '../actions'
 
-export default class TodoForm extends React.Component {
-  constructor(props) {
-    super(props)
-    
-    this.state = {
-        value: ""
-    }
-  }
-    
-      onHandleChange(e) {
-        this.setState({ value: e.target.value })
-      }
+const  TodoForm = ({ text, setText, addTodo }) => {
+    return(
+        <form
+          className='row'
+          onSubmit={e => {
+            e.preventDefault()
+            addTodo(text)
+          }}> 
+            <div className='input-field col s10'>
+              <label htmlFor="todo-input">Novo Todo</label>
+              <input id='todo-input' value={text} type='text' onChange={e => setText(e.target.value)} />
+            </div>
 
-      onClick(e) {
-        this.props.onAddTodo(this.state.value)
-
-        this.setState({ value: '' })
-      }
-
-    render() {
-        const { value } = this.state
-
-        return(
-            <> 
-                <input value={value} onChange={e => this.onHandleChange(e)} />
-                <button type='button' onClick={e => this.onClick(e)}>Salvar</button>
-            </>
-        )
-    }
+            <div className='input-field col s2'>
+              <button className='btn waves-effect waves-light' type='button' onClick={() => addTodo(text)}>Salvar</button>
+            </div>
+        </form>
+    )
 }
+
+function mapStateToProps(state) {
+  return {
+    text: state.text
+  }
+}
+
+const mapDispatchToProps = { setText, addTodo }
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoForm)

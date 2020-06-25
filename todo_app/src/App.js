@@ -3,30 +3,33 @@ import './App.css';
 
 import TodoForm from './components/todoForm'
 import TodoList from './components/todoList'
+import { toggleTodo } from './actions'
 
-export default class todoApp extends React.Component {
-  state = {
-    todos: ['Lavar a louça', 'estudar', 'escrever'],
-  }
+import { connect } from "react-redux";
 
-  onAddTodo(newTodo) {
-    const { todos } = this.state
-    this.setState({ todos: [...todos, newTodo] })
-  }
-
-  render() {
-    const { todos } = this.state
-
+const todoApp = ({ todos, toggleTodo })  => {
     return (
       <div className='App'>
         <h1>Todo App</h1>
         
         <TodoForm  onAddTodo={newTodo => this.onAddTodo(newTodo)}/>
 
-        <ul>
-          {todos.map((todo,index) => <TodoList key={index} todo={todo} />)}
+        <ul className='collection'>
+          {todos.map((todo,index) => <TodoList 
+              toggleTodo={() => toggleTodo(todo)} 
+              key={index} 
+              todo={todo}/>)}
         </ul>
       </div>
     )
   }
-}
+
+  function mapStateToProps(state) {
+    return {
+      todos: state.todos
+    }
+  }
+
+  const mapDispatchToProps = { toggleTodo }
+
+  export default connect(mapStateToProps, mapDispatchToProps)(todoApp)
